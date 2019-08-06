@@ -1,0 +1,16 @@
+version: '2'
+services:
+  jhreact-mongodb:
+    image: mongo:4.0.10
+    ports:
+      - '27017:27017'
+    command: mongos --configdb jhreact-mongodb-config
+  jhreact-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  jhreact-mongodb-config:
+    image: mongo:4.0.10
+    container_name: jhreact-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
